@@ -20,19 +20,24 @@
 
 
 exporters:
+  otlp/signoz:
+    endpoint: host.docker.internal:${env:OTEL_COLLECTOR_PORT_GRPC}
+    tls:
+      insecure: true
   otlphttp/signoz:
-    endpoint: http://host.docker.internal:4318
+    endpoint: host.docker.internal:${env:OTEL_COLLECTOR_PORT_HTTP}
     tls:
       insecure: true
 
 service:
   pipelines:
     traces:
-      exporters: [otlp, debug, spanmetrics, otlphttp/signoz]
+      # exporters: [otlp, debug, spanmetrics, otlp/signoz]
+      exporters: [otlp/signoz, debug, spanmetrics]
     metrics:
-      exporters: [otlphttp/prometheus, debug, otlphttp/signoz]
+      exporters: [otlp/signoz, debug]
     logs:
-      exporters: [opensearch, debug, otlphttp/signoz]
+      exporters: [otlp/signoz, debug]
 
 
 
