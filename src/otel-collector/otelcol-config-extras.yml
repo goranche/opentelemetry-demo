@@ -24,6 +24,11 @@ exporters:
     endpoint: host.docker.internal:${env:OTEL_COLLECTOR_PORT_GRPC}
     tls:
       insecure: true
+  otlp/uptrace:
+    endpoint: m4max.local:4317
+    tls: { insecure: true }
+    headers:
+      uptrace-dsn: 'http://project2_secret_token@m4max.local:14318?grpc=14317'
   otlphttp/signoz:
     endpoint: host.docker.internal:${env:OTEL_COLLECTOR_PORT_HTTP}
     tls:
@@ -32,12 +37,14 @@ exporters:
 service:
   pipelines:
     traces:
-      # exporters: [otlp, debug, spanmetrics, otlp/signoz]
       exporters: [otlp/signoz, debug, spanmetrics]
+      # exporters: [otlp/uptrace, debug, spanmetrics]
     metrics:
       exporters: [otlp/signoz, debug]
+      # exporters: [otlp/uptrace, debug]
     logs:
       exporters: [otlp/signoz, debug]
+      # exporters: [otlp/uptrace, debug]
 
 
 
