@@ -23,45 +23,18 @@ exporters:
   otlp/signoz:
     endpoint: signoz.goranche.dev:${env:OTEL_COLLECTOR_PORT_GRPC}
     tls:
-      # insecure: true
       insecure_skip_verify: true
-  otlp/uptrace:
-    endpoint: m4max.local:4317
-    tls: { insecure: true }
-    headers:
-      uptrace-dsn: 'http://project2_secret_token@m4max.local:14318?grpc=14317'
   otlphttp/signoz:
     endpoint: signoz.goranche.dev:${env:OTEL_COLLECTOR_PORT_HTTP}
     tls:
-      # insecure: true
       insecure_skip_verify: true
 
 service:
   pipelines:
     traces:
-      exporters: [otlp/signoz, debug, spanmetrics]
-      # exporters: [otlp/uptrace, debug, spanmetrics]
-    metrics:
       exporters: [otlp/signoz, debug]
-      # exporters: [otlp/uptrace, debug]
+    metrics:
+      receivers: [docker_stats, httpcheck/frontend-proxy, hostmetrics, nginx, otlp, redis]
+      exporters: [otlp/signoz, debug]
     logs:
       exporters: [otlp/signoz, debug]
-      # exporters: [otlp/uptrace, debug]
-
-
-
-
-# exporters:
-#   otlp/signoz:
-#     endpoint: http://host.docker.internal:4317
-#     tls:
-#       insecure: true
-#
-# service:
-#   pipelines:
-#     traces:
-#       exporters: [otlp, debug, spanmetrics, otlp/signoz]
-#     metrics:
-#       exporters: [otlphttp/prometheus, debug, otlp/signoz]
-#     logs:
-#       exporters: [opensearch, debug, otlp/signoz]

@@ -217,6 +217,20 @@ start-goranche:
 	@echo "Go to http://mini-ai.local:8080/loadgen/ for the Load Generator UI."
 	@echo "Go to https://opentelemetry.io/docs/demo/feature-flags/ to learn how to change feature flags."
 
+.PHONY: start-otel-demo
+start-otel-demo:
+	$(DOCKER_COMPOSE_CMD) $(DOCKER_COMPOSE_ENV) -f docker-compose.otel-demo.yml up --force-recreate --remove-orphans --detach
+	@echo ""
+	@echo "OpenTelemetry Demo in otel-demo mode is running."
+	@echo ""
+	@echo "Go to https://otel-demo.goranche.dev for the selection screen."
+	@echo ""
+	@echo "Go to https://otel-demo.goranche.dev for the demo UI."
+	# @echo "Go to http://mini-ai.local:8080/jaeger/ui for the Jaeger UI."
+	# @echo "Go to http://mini-ai.local:8080/grafana/ for the Grafana UI."
+	@echo "Go to https://otel-demo.goranche.dev/loadgen/ for the Load Generator UI."
+	@echo "Go to https://opentelemetry.io/docs/demo/feature-flags/ to learn how to change feature flags."
+
 .PHONY: stop
 stop:
 	$(DOCKER_COMPOSE_CMD) $(DOCKER_COMPOSE_ENV) down --remove-orphans --volumes
